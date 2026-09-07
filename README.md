@@ -1,4 +1,4 @@
-# Sai Srinivasa Milk & Milk Products &mdash; Django E-commerce Site
+<!-- # Sai Srinivasa Milk & Milk Products &mdash; Django E-commerce Site
 
 A full-stack dairy shop website: Django (Python) backend + server-rendered
 HTML/CSS/JS frontend + PostgreSQL (or MySQL) database.
@@ -150,4 +150,70 @@ Since everything (products, prices, availability, orders, earnings, the
 owner password) is now stored in the database instead of in browser
 memory, it will correctly persist across page refreshes, server
 restarts, and different devices &mdash; that was the main limitation of
-the earlier static HTML/CSS/JS version of this site.
+the earlier static HTML/CSS/JS version of this site. -->
+
+# 🥛 MilkPoint - Online Dairy Shop
+
+MilkPoint is a Django-based web application for managing and selling
+milk and dairy products online.
+
+The application provides a customer storefront for browsing products,
+adding products to a cart, placing orders, and viewing order details.
+It also includes an owner/admin section for managing products and orders.
+
+## 🚀 Features
+
+### Customer Features
+- Browse milk and dairy products
+- View product details
+- Add products to cart
+- Update cart quantities
+- Checkout and place orders
+- Order success confirmation
+- Responsive user interface
+
+### Owner/Admin Features
+- Owner login
+- Add and manage products
+- View customer orders
+- Manage product information
+- Owner settings
+
+## 🛠️ Technologies Used
+
+- Python
+- Django
+- HTML5
+- CSS3
+- JavaScript
+- SQLite
+- Git & GitHub
+
+## 📂 Project Structure
+
+```text
+milkpoint/
+│
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── shop/
+│   ├── migrations/
+│   ├── management/
+│   ├── static/
+│   ├── templates/
+│   ├── admin.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   ├── views.py
+│   └── cart.py
+│
+├── manage.py
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
