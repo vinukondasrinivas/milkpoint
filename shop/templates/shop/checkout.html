@@ -1,0 +1,32 @@
+{% extends "shop/base.html" %}
+{% block title %}Checkout &mdash; Sai Srinivasa{% endblock %}
+{% block content %}
+<main class="page-narrow">
+  <h2 class="page-title">Complete Your Payment</h2>
+
+  <div class="order-summary-list card-panel">
+    {% for e in entries %}
+      <div><span>{{ e.product.name }} ({{ e.variant.size }}) &times; {{ e.qty }}</span><span>&#8377;{{ e.line_total|floatformat:0 }}</span></div>
+    {% endfor %}
+    <div class="summary-row total" style="margin-top:10px;"><span>Total</span><span>&#8377;{{ total|floatformat:0 }}</span></div>
+  </div>
+
+  <div class="qr-box">
+    <div class="qr-amount">&#8377;{{ total|floatformat:0 }}</div>
+    {% if settings.qr_image %}
+      <img src="{{ settings.qr_image.url }}" alt="Payment QR code">
+    {% else %}
+      <div class="empty-note">The shop hasn't uploaded a payment QR yet.</div>
+    {% endif %}
+    {% if settings.upi_id %}<div class="qr-upi">UPI ID: {{ settings.upi_id }}</div>{% endif %}
+  </div>
+
+  <div class="note-text">Scan the QR with any UPI app (PhonePe, GPay, Paytm), enter the amount shown above if it isn't filled automatically, and complete the payment. Then tap the button below to confirm your order with the shop.</div>
+
+  <form method="post" action="{% url 'confirm_order' %}">
+    {% csrf_token %}
+    <button type="submit" class="confirm-btn">I've Paid &mdash; Confirm Order</button>
+  </form>
+  <a href="{% url 'storefront' %}" class="continue-link" style="display:block;margin-top:12px;">Back to shop</a>
+</main>
+{% endblock %}

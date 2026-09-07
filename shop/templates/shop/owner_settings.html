@@ -1,0 +1,48 @@
+{% extends "shop/base.html" %}
+{% block title %}Settings &mdash; Owner Dashboard{% endblock %}
+{% block content %}
+<div class="admin-topbar">
+  <h2>Owner Dashboard &mdash; Sai Srinivasa</h2>
+  <a class="icon-btn" href="{% url 'storefront' %}">Exit to Shop</a>
+</div>
+<div class="admin-wrap">
+  {% include "shop/_owner_tabs.html" with active="settings" %}
+
+  <div class="card-panel">
+    <h4>Payment QR &amp; Shop Timings</h4>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if settings.qr_image %}
+        <img class="current-qr-preview" src="{{ settings.qr_image.url }}" alt="Current payment QR">
+      {% endif %}
+      <div class="field"><label>Replace QR Code Image</label>{{ form.qr_image }}</div>
+      <div class="field"><label>UPI ID (shown as text under the QR, optional)</label>{{ form.upi_id }}</div>
+      <div class="two-col">
+        <div class="field"><label>Morning Opens</label>{{ form.morning_open }}</div>
+        <div class="field"><label>Morning Closes</label>{{ form.morning_close }}</div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Evening Opens</label>{{ form.evening_open }}</div>
+        <div class="field"><label>Evening Closes</label>{{ form.evening_close }}</div>
+      </div>
+      <button type="submit" name="save_settings" class="primary-btn">Save Settings</button>
+      <div class="note-text">This QR image is shown to every customer at checkout exactly as uploaded. If it's a static QR (like most PhonePe/GPay QRs), customers may need to type the amount themselves.</div>
+    </form>
+  </div>
+
+  <div class="card-panel">
+    <h4>Change Owner Password</h4>
+    <form method="post">
+      {% csrf_token %}
+      {% if pw_form.errors %}
+        <div class="form-error show">{{ pw_form.errors }}</div>
+      {% endif %}
+      <div class="field"><label>Current Password</label>{{ pw_form.old_password }}</div>
+      <div class="field"><label>New Password</label>{{ pw_form.new_password1 }}</div>
+      <div class="field"><label>Confirm New Password</label>{{ pw_form.new_password2 }}</div>
+      <button type="submit" name="change_password" class="primary-btn">Update Password</button>
+      <div class="note-text">Your password is stored securely (hashed) in the database and will keep working across refreshes, restarts, and devices.</div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+Django==6.1
+Pillow==11.*
+psycopg2-binary==2.9.*
+python-dotenv==1.*
+
+# If you prefer MySQL instead of PostgreSQL, comment out psycopg2-binary above
+# and install this instead (also set DB_ENGINE=mysql in your .env):
+# mysqlclient==2.*

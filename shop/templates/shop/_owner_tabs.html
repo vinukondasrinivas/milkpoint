@@ -1,0 +1,9 @@
+<div class="admin-tabs">
+  <a class="admin-tab {% if active == 'products' %}active{% endif %}" href="{% url 'owner_products' %}">Manage Products</a>
+  <a class="admin-tab {% if active == 'orders' %}active{% endif %}" href="{% url 'owner_orders' %}">Orders &amp; Earnings</a>
+  <a class="admin-tab {% if active == 'settings' %}active{% endif %}" href="{% url 'owner_settings' %}">Settings</a>
+  <form method="post" action="{% url 'owner_logout' %}" style="margin-left:auto;">
+    {% csrf_token %}
+    <button type="submit" class="admin-tab" style="background:none;color:var(--danger);border-color:var(--danger);">Logout</button>
+  </form>
+</div>

@@ -1,0 +1,14 @@
+{% extends "shop/base.html" %}
+{% block title %}Order Confirmed &mdash; Sai Srinivasa{% endblock %}
+{% block content %}
+<main class="page-narrow">
+  <div class="card-panel" style="text-align:center;">
+    <h2 class="page-title">Order Confirmed 🎉</h2>
+    <p style="color:var(--ink-soft);line-height:1.6;">
+      Thank you! Your order <b>{{ order.order_number }}</b> for <b>&#8377;{{ order.total|floatformat:0 }}</b>
+      has been recorded. The shop will prepare it fresh for you.
+    </p>
+    <a href="{% url 'storefront' %}" class="primary-btn" style="display:inline-block;margin-top:14px;text-decoration:none;">Continue Shopping</a>
+  </div>
+</main>
+{% endblock %}

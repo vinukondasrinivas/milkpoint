@@ -1,0 +1,71 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="hero-eyebrow">From our farms &middot; Dammapeta</span>
+      <h1><span class="hero-highlight">Farm-fresh dairy,</span> <em>the traditional bilona way.</em></h1>
+      <p>Cow &amp; buffalo milk, curd, butter, ghee, paneer, lassi and festive sweets &mdash; made fresh every day and delivered with the goodness of nature in every sip.</p>
+      <div class="hero-badges">
+        <div class="hero-badge"><div><b>100%</b>Pure &amp; Natural</div></div>
+        <div class="hero-badge"><div><b>Bilona</b>Traditional Method</div></div>
+        <div class="hero-badge"><div><b>Daily</b>Fresh From Farm</div></div>
+        <div class="hero-badge"><div><b>Morning</b>{{ shop_settings.morning_open }}&ndash;{{ shop_settings.morning_close }}</div></div>
+        <div class="hero-badge"><div><b>Evening</b>{{ shop_settings.evening_open }}&ndash;{{ shop_settings.evening_close }}</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="{% static 'shop/seed_images/logo.jpg' %}" alt="Fresh cow milk">
+    </div>
+  </div>
+</section>
+<svg class="arch-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,0 L1200,0 L1200,20 C1000,44 900,10 600,26 C300,42 200,8 0,22 Z" fill="#fbf5e7"></path>
+</svg>
+
+<main class="shop-section">
+  <div class="section-head">
+    <div>
+      <h2>Today's Fresh Stock</h2>
+      <p>Choose a pack size for each item &mdash; only products marked available by the shop are shown.</p>
+    </div>
+  </div>
+
+  <div class="filter-tabs">
+    {% for cat in categories %}
+      <a class="filter-tab {% if cat == active_category %}active{% endif %}" href="?category={{ cat }}">{{ cat }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="product-grid">
+    {% for product in products %}
+      <div class="product-card" id="product-{{ product.id }}" data-product-id="{{ product.id }}">
+        <div class="thumb">
+          <span class="badge-cat">{{ product.category }}</span>
+          {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">{% endif %}
+        </div>
+        <div class="product-body">
+          <h3>{{ product.name }}</h3>
+          <div class="size-pills" data-pid="{{ product.id }}">
+            {% for v in product.variants.all %}
+              <button type="button" class="size-pill {% if forloop.first %}active{% endif %}"
+                      data-variant-id="{{ v.id }}" data-price="{{ v.price }}">{{ v.size }}</button>
+            {% endfor %}
+          </div>
+          <div class="product-price" data-price-for="{{ product.id }}">
+            &#8377;{{ product.variants.first.price|floatformat:0 }}
+          </div>
+          <div class="product-foot" data-foot-for="{{ product.id }}">
+            <button class="add-btn" data-act="add" data-variant-id="{{ product.variants.first.id }}">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="empty-note">No products in this category yet.</div>
+    {% endfor %}
+  </div>
+</main>
+
+{% endblock %}

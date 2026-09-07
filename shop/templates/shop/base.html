@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Sai Srinivasa Milk & Milk Products{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="{% url 'storefront' %}">
+      <img src="{% static 'shop/seed_images/logo.jpg' %}" alt="Sai Srinivasa logo">
+      <div class="brand-text">
+        <span class="om">Pure Milk &middot; Pure Love</span>
+        <div class="name">Sai Srinivasa</div>
+        <div class="tag">Milk &amp; Milk Products</div>
+      </div>
+    </a>
+    <div class="header-actions">
+      {% if user.is_authenticated %}
+        <a class="admin-link" href="{% url 'owner_products' %}">Owner Dashboard</a>
+      {% else %}
+        <a class="admin-link" href="{% url 'owner_login' %}">Owner Login</a>
+      {% endif %}
+      <button class="icon-btn" id="openCartBtn">&#128722; Cart <span class="cart-count" id="cartCount">{{ cart_count }}</span></button>
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<div class="messages-wrap">
+  {% for message in messages %}
+    <div class="flash-msg {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <h4>Sai Srinivasa Milk &amp; Milk Products</h4>
+      <p>Kapula Bazar, Beside YSR Statue,</p>
+      <p>Dammapeta (V&amp;M),</p>
+      <p>Bhadradri Kothagudem District</p>
+    </div>
+    <div>
+      <h4>Proprietors</h4>
+      <p>Vinukonda Nageswara Rao &mdash; 7893864855</p>
+      <p>Vinukonda Srinivas &mdash; 9989296090</p>
+    </div>
+    <div>
+      <h4>Shop Hours</h4>
+      <p>Morning: {{ shop_settings.morning_open }} &ndash; {{ shop_settings.morning_close }}</p>
+      <p>Evening: {{ shop_settings.evening_open }} &ndash; {{ shop_settings.evening_close }}</p>
+      <p>Goodness of nature, in every sip.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; {% now "Y" %} Sai Srinivasa Milk &amp; Milk Products</span>
+    <span>All prices set and updated by the shop owner</span>
+  </div>
+</footer>
+
+<!-- Cart Drawer (shared on every page) -->
+<div id="cartOverlay"></div>
+<aside id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Your Cart</h3>
+    <button class="close-x" id="closeCartBtn">&times;</button>
+  </div>
+  <div class="drawer-body" id="cartBody"><div class="empty-note">Loading cart&hellip;</div></div>
+  <div class="drawer-foot">
+    <div class="summary-row"><span>Items</span><span id="sumItems">0</span></div>
+    <div class="summary-row total"><span>Total</span><span id="sumTotal">&#8377;0</span></div>
+    <a class="checkout-btn" id="checkoutBtn" href="{% url 'checkout' %}">Proceed to Pay</a>
+    <button class="continue-link" id="continueBtn">Continue shopping</button>
+  </div>
+</aside>
+
+<div id="toast"></div>
+
+<script>
+  window.CSRF_TOKEN = "{{ csrf_token }}";
+  window.URLS = {
+    cartAdd: "{% url 'cart_add' %}",
+    cartChange: "{% url 'cart_change' %}",
+    cartRemove: "{% url 'cart_remove' %}",
+    cartSummary: "{% url 'cart_summary' %}"
+  };
+</script>
+<script src="{% static 'shop/js/main.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

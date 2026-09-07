@@ -1,0 +1,25 @@
+{% extends "shop/base.html" %}
+{% block title %}Owner Login &mdash; Sai Srinivasa{% endblock %}
+{% block content %}
+<main class="page-narrow">
+  <div class="card-panel">
+    <h2 class="page-title" style="margin-bottom:16px;">Owner Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="form-error show">Incorrect username or password. Please try again.</div>
+      {% endif %}
+      <div class="field">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+      </div>
+      <div class="field">
+        <label for="id_password">Password</label>
+        {{ form.password }}
+      </div>
+      <button type="submit" class="primary-btn">Login</button>
+    </form>
+    <div class="note-text">Default login is username <b>owner</b>, password <b>998929</b> (set the first time the site is initialised). Change it any time from Settings once logged in.</div>
+  </div>
+</main>
+{% endblock %}

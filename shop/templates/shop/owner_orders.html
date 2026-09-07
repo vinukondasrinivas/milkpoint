@@ -1,0 +1,49 @@
+{% extends "shop/base.html" %}
+{% block title %}Orders & Earnings &mdash; Owner Dashboard{% endblock %}
+{% block content %}
+<div class="admin-topbar">
+  <h2>Owner Dashboard &mdash; Sai Srinivasa</h2>
+  <a class="icon-btn" href="{% url 'storefront' %}">Exit to Shop</a>
+</div>
+<div class="admin-wrap">
+  {% include "shop/_owner_tabs.html" with active="orders" %}
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">Today's Orders</div><div class="value">{{ today_orders_count }}</div></div>
+    <div class="stat-card"><div class="label">Today's Earnings</div><div class="value gold">&#8377;{{ today_earnings|floatformat:0 }}</div></div>
+    <div class="stat-card"><div class="label">All-Time Orders</div><div class="value">{{ all_orders_count }}</div></div>
+    <div class="stat-card"><div class="label">All-Time Earnings</div><div class="value gold">&#8377;{{ all_earnings|floatformat:0 }}</div></div>
+  </div>
+
+  <h4 style="color:var(--navy);margin-bottom:10px;">Daily Breakdown</h4>
+  <div class="admin-table-wrap" style="margin-bottom:26px;">
+    <table class="admin-table">
+      <thead><tr><th>Date</th><th>Orders</th><th>Earnings</th></tr></thead>
+      <tbody>
+        {% for row in daily %}
+        <tr><td>{{ row.day }}</td><td>{{ row.order_count }}</td><td>&#8377;{{ row.earnings|floatformat:0 }}</td></tr>
+        {% empty %}
+        <tr><td colspan="3">No orders yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h4 style="color:var(--navy);margin-bottom:10px;">Recent Orders</h4>
+  <div class="orders-log">
+    {% for order in orders %}
+      <div class="order-row">
+        <span class="oid">{{ order.order_number }}</span>
+        <span class="items">
+          {% for item in order.items.all %}{{ item.product_name }} ({{ item.variant_size }}) &times;{{ item.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        </span>
+        <span>{{ order.created_at|date:"Y-m-d H:i" }}</span>
+        <span class="amt">&#8377;{{ order.total|floatformat:0 }}</span>
+      </div>
+    {% empty %}
+      <div class="empty-note">No orders placed yet.</div>
+    {% endfor %}
+  </div>
+  <div class="note-text">These figures are stored permanently in the database, so they'll be here whenever you check &mdash; today, tomorrow, or a year from now.</div>
+</div>
+{% endblock %}

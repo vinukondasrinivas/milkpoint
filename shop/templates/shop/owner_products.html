@@ -1,0 +1,78 @@
+{% extends "shop/base.html" %}
+{% block title %}Manage Products &mdash; Owner Dashboard{% endblock %}
+{% block content %}
+<div class="admin-topbar">
+  <h2>Owner Dashboard &mdash; Sai Srinivasa</h2>
+  <div style="display:flex;gap:8px;">
+    <a class="icon-btn" href="{% url 'storefront' %}">Exit to Shop</a>
+  </div>
+</div>
+<div class="admin-wrap">
+  {% include "shop/_owner_tabs.html" with active="products" %}
+
+  <div class="card-panel">
+    <h4>Add New Product</h4>
+    <form method="post" action="{% url 'owner_product_add' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="field"><label>Product Name</label>{{ new_product_form.name }}</div>
+      <div class="two-col">
+        <div class="field"><label>Category</label>{{ new_product_form.category }}</div>
+        <div class="field"><label>Starting Size &amp; Price</label>
+          <div style="display:flex;gap:8px;">
+            {{ new_product_form.size }}
+            {{ new_product_form.price }}
+          </div>
+        </div>
+      </div>
+      <div class="field"><label>Product Image</label>{{ new_product_form.image }}</div>
+      <button type="submit" class="primary-btn">Add Product</button>
+      <div class="note-text">New products are added instantly and marked "available". Add more pack sizes afterwards in the list below.</div>
+    </form>
+  </div>
+
+  {% for product in products %}
+  <div class="prod-admin-card" data-id="{{ product.id }}">
+    {% if product.image %}<img src="{{ product.image.url }}" alt="">{% endif %}
+    <div class="prod-admin-main">
+      <div class="pname-row">
+        <input type="text" value="{{ product.name }}" data-url="{% url 'owner_product_rename' product.id %}" data-field="value">
+        <span class="cat-pill">{{ product.category }}</span>
+      </div>
+      <div class="variant-rows">
+        {% for v in product.variants.all %}
+        <div class="variant-row">
+          <input class="vsize" type="text" value="{{ v.size }}" data-url="{% url 'owner_variant_update' v.id %}" data-field="value" data-extra-field="size">
+          <span>&#8377;</span>
+          <input class="vprice" type="number" value="{{ v.price|floatformat:0 }}" data-url="{% url 'owner_variant_update' v.id %}" data-field="value" data-extra-field="price">
+          <form method="post" action="{% url 'owner_variant_delete' v.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="vdel" title="Remove this size">&#10005;</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <form method="post" action="{% url 'owner_variant_add' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="add-variant-btn">+ Add another size</button>
+      </form>
+    </div>
+    <div class="prod-admin-side">
+      <form method="post" action="{% url 'owner_product_toggle_available' product.id %}">
+        {% csrf_token %}
+        <label class="toggle-label">
+          <label class="toggle">
+            <input type="checkbox" name="available" {% if product.available %}checked{% endif %} onchange="this.form.submit()">
+            <span class="toggle-slider"></span>
+          </label>
+          Available
+        </label>
+      </form>
+      <form method="post" action="{% url 'owner_product_delete' product.id %}" onsubmit="return confirm('Remove {{ product.name }} from the website?');">
+        {% csrf_token %}
+        <button type="submit" class="del-btn">Delete Product</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
